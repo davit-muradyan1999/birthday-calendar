@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite build && concurrently -k -n api,web -c blue,green \"wrangler pages dev dist --port 8788 --d1 DB --compatibility-date 2025-09-01\" \"vite\"",
+    "dev": "vite build && concurrently -k -n api,web -c blue,green \"wrangler dev --port 8787\" \"vite\"",
     "build": "vite build",
-    "preview": "vite build && wrangler pages dev dist --port 8788 --d1 DB --compatibility-date 2025-09-01"
+    "deploy": "vite build && wrangler deploy"
   },
   "dependencies": {
     "html2canvas-pro": "^2.5.2",

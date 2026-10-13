@@ -1,4 +1,4 @@
-// Ընդհանուր օգնականներ Cloudflare Pages Functions-ի համար։
+// Ընդհանուր օգնականներ Cloudflare Worker-ի համար։
 // Տվյալները պահվում են D1 տվյալների բազայում (binding-ի անունը՝ DB)։
 
 let ready = false
@@ -45,12 +45,3 @@ export function isValidDay(month, day) {
   return day <= daysInMonth
 }
 
-// Սխալների ընդհանուր մշակում
-export const handle = (fn) => async (context) => {
-  try {
-    return await fn(context)
-  } catch (err) {
-    console.error(err)
-    return json({ error: 'Սերվերի սխալ' }, 500)
-  }
-}
