@@ -113,6 +113,12 @@ const selectedPeople = computed(() =>
     : [],
 )
 
+const myEntries = computed(() =>
+  birthdays.value
+    .filter((b) => myIds.value.includes(b.id))
+    .sort((a, b) => a.month - b.month || a.day - b.day),
+)
+
 const initials = (b) => (b.firstName[0] + b.lastName[0]).toUpperCase()
 const inDaysLabel = (n) => (n === 0 ? 'Այսօր 🎉' : n === 1 ? 'Վաղը' : `${n} օրից`)
 </script>
@@ -194,6 +200,30 @@ const inDaysLabel = (n) => (n === 0 ? 'Այսօր 🎉' : n === 1 ? 'Վաղը' :
             {{ saving ? 'Պահպանվում է…' : 'Պահպանել' }}
           </button>
         </form>
+
+        <div v-if="myEntries.length" class="mt-5 border-t border-slate-100 pt-4">
+          <h3 class="mb-2 text-sm font-semibold text-slate-900">Իմ գրառումները</h3>
+          <ul class="space-y-2">
+            <li
+              v-for="p in myEntries"
+              :key="p.id"
+              class="flex items-center gap-3 rounded-xl bg-slate-50 px-3 py-2"
+            >
+              <div class="min-w-0 flex-1">
+                <div class="truncate text-sm font-medium text-slate-800">{{ p.firstName }} {{ p.lastName }}</div>
+                <div class="text-xs text-slate-500">{{ formatDay(p.month, p.day) }}</div>
+              </div>
+              <button
+                type="button"
+                class="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-50"
+                @click="remove(p)"
+              >
+                Ջնջել
+              </button>
+            </li>
+          </ul>
+          <p class="mt-2 text-xs text-slate-400">Ջնջել կարող եք միայն այս բրաուզերից ավելացրած գրառումները։</p>
+        </div>
       </section>
 
       <!-- Աջ սյուն՝ մոտականեր + ամբողջ ցուցակ -->
@@ -254,16 +284,13 @@ const inDaysLabel = (n) => (n === 0 ? 'Այսօր 🎉' : n === 1 ? 'Վաղը' :
                 <li v-for="p in m.people" :key="p.id" class="group flex items-center gap-3 px-4 py-2">
                   <span class="w-7 shrink-0 text-center text-sm font-bold text-indigo-600">{{ p.day }}</span>
                   <span class="flex-1 truncate text-sm text-slate-800">{{ p.firstName }} {{ p.lastName }}</span>
-                  <span v-if="myIds.includes(p.id)" class="text-[10px] font-medium uppercase tracking-wide text-emerald-600">Ես</span>
+                  <span v-if="myIds.includes(p.id)" class="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700">Ես</span>
                   <button
                     v-if="myIds.includes(p.id)"
-                    class="rounded-lg p-1 text-slate-300 transition hover:bg-red-50 hover:text-red-500"
-                    title="Ջնջել"
+                    class="rounded-lg px-2 py-1 text-xs font-medium text-red-500 transition hover:bg-red-50 hover:text-red-600"
                     @click="remove(p)"
                   >
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    Ջնջել
                   </button>
                 </li>
               </ul>
