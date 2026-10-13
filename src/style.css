@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+body {
+  font-family: "Noto Sans Armenian", "Segoe UI", system-ui, sans-serif;
+}
